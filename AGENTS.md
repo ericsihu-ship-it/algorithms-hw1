@@ -1,65 +1,48 @@
 # AGENTS.md
 
-2026-2 고급알고리즘(SIT2001-01)의 **실습 환경 template 저장소**. 이 문서는 이
-저장소에서 작업하는 AI 도구를 위한 가이드다.
+2026-2 고급알고리즘(SIT2001-01) **과제 1 — 정렬 비교(병합 · 퀵 · 힙)** 저장소.
+이 문서는 이 저장소에서 작업하는 AI 도구를 위한 가이드다.
+[algorithm-env](https://github.com/lec-algorithm/algorithm-env) template에서 시작했다.
 
 ## 이 저장소의 범위
 
-- 여기는 **환경과 뼈대만** 담는다. 수강생은 `Use this template`으로 사본을
-  만들어 과제·개인프로젝트를 시작한다.
-- **강의 예제 코드는 여기 넣지 않는다.** 주제별 예제는 `algorithm-code`에
-  있고, 그쪽은 매주 자란다. 교안·슬라이드는 `lecture` 저장소다.
-- `src`의 버블 정렬은 환경이 도는지 보여 주는 예제다. 알고리즘을 더 넣지
-  않는다. 예제가 늘어나면 template이 프로젝트 출발점으로 지저분해진다.
-- **설명을 길게 쓰지 않는다.** README는 "어떻게 돌리는가"까지만 담고,
-  "왜 이렇게 되는가"는 강의 자료가 맡는다.
+- 정렬은 셋이다: `mergeSort` · `quickSort` · `heapSort`. 퀵 정렬만 실험 3을 위해
+  피벗 · 파티션 변형 여섯(`QUICK_VARIANTS`)을 더 가진다. 정렬을 늘리지 않는다.
+- 병합과 퀵은 수업 코드(algorithm-code)와 **같은 절차**여야 한다. 테스트가
+  슬라이드의 비교 · 이동 횟수(병합 22 · 68, 퀵 25 · 21 등)를 그대로 확인한다.
+  세는 규칙을 바꾸면 이 테스트가 깨진다.
+- 보고서는 `report/REPORT.md`에서 PDF로 낸다. 측정값은 `report/data/*.csv`,
+  그래프는 `report/figures/*.svg`이고 `make charts`가 다시 만든다. 손으로 고치지 않는다.
 
 ## 구조와 규약
 
 ```plaintext
-src/    sort.h · sort.c · main.c · sort.py · main.py
-tests/  test_sort.c · test_sort.py
+src/    sort.h · sortutil.h · sort.c · mergeSort.c · quickSort.c · heapSort.c
+        minstd.h · minstd.c · bench.h · bench.c · main.c · *.pseudo
+tests/  test_sort.c
+tools/  charts.py · svgplot.py
 ```
 
-- **외부 라이브러리를 쓰지 않는다.** C는 표준 라이브러리만, Python은 표준
-  모듈만. C 테스트도 프레임워크 없이 직접 쓴다. 이미지에 무언가를 더 깔아야
-  하는 코드는 넣지 않는다.
-- **실행 파일은 `*.out`으로 만든다.** `.gitignore`가 그것만 걸러낸다.
-  확장자 없는 이름으로 컴파일하면 Linux 바이너리가 커밋에 섞인다.
-- C와 Python은 같은 알고리즘을 같은 이름의 함수로 구현한다. 파일명은 각
-  언어의 관례를 따른다(C는 camelCase, Python은 snake_case).
-- **실행 수단은 셋이고 전부 `Makefile`을 거친다.** Code Runner의 ▶ 버튼(파일
-  하나), `Cmd/Ctrl + Shift + B`(전체), `F5`(디버그). 확장이 만드는 기본 명령은
-  파일 하나만 컴파일해 링크가 실패하므로 쓰지 않는다.
-- **VS Code 설정(`.vscode/`)은 저장소에 커밋한다.** 확장이 기본으로 만드는
-  "활성 파일 빌드"는 파일 하나만 컴파일해 링크가 실패한다. 빌드·디버그는
-  `Makefile`을 거치게 해 두었다. 소스 구성을 바꾸면 이 설정도 함께 본다.
-- **컴파일 경고 없이 빌드되어야 한다.** `CFLAGS`에 `-Wall -Wextra`가 켜져
-  있다. 수강생이 복사할 저장소이므로 경고를 남긴 채 커밋하지 않는다.
+- **외부 라이브러리를 쓰지 않는다.** C는 표준 라이브러리만, Python은 표준 모듈만.
+- **C로만 낸다.** `tools/`의 Python은 그래프용이다.
+- 정렬 코드는 원소를 `sortutil.h`의 함수(`sortCompare` · `sortCopy` · `sortSwap`)로만
+  만진다. 비교 · 이동을 한곳에서 세기 위해서다.
+- 의사코드(`src/*.pseudo`)가 기준이다. 절차를 바꾸면 의사코드도 같이 고친다.
+- 난수는 `minstd`만 쓴다(`rand()` 금지). 비교 · 이동 횟수가 기계와 무관하게 재현되어야 한다.
+- 실행 파일은 `*.out`으로 만든다. C는 camelCase, Python은 snake_case.
+- **컴파일 경고 없이** 빌드되어야 한다(`-Wall -Wextra`).
 
-## 실행 환경
-
-수강생이 설치하는 것은 없다. Codespaces가 주 경로이고, 로컬은 Git과 Docker만
-있으면 된다. 컴파일러와 Python은 이미지 안에 있다.
+## 실행
 
 ```sh
-docker compose up -d
-docker compose exec lab bash
-make test
+make test       # 커밋 전에 반드시 통과
+make run        # 실험 1~4 (1분 가까이 걸린다)
+make charts     # report/data · report/figures 다시 만들기
+make sanitize   # ASan · UBSan
 ```
 
-- 서비스는 `lab` 하나다. 컨테이너를 나누지 않는다.
-- 저장소 폴더가 컨테이너의 `/work`에 바인드 마운트된다. **이미지에 소스를
-  굽지 않는다.** 수강생이 고쳐 가며 쓰는 코드라 마운트가 단일 원본이어야 한다.
-- `.devcontainer/devcontainer.json`은 별도 이미지를 정의하지 않고
-  `compose.yml`의 `lab` 서비스를 그대로 쓴다. 컨테이너 정의의 단일 원본은
-  `compose.yml`이다. 이미지에 무언가 추가할 일이 생기면 `Dockerfile`만 고친다.
+## Git
 
-## Git 워크플로: git flow
-
-- 새 작업은 `develop`에서 `feature/*` 브랜치를 만들어 시작한다.
-  `main`에는 직접 커밋하지 않는다.
 - 한 커밋에는 한 가지 주제만 담는다.
-- **커밋 전에 `make test`가 통과해야 한다.** C와 Python 두 구현이 같은
-  결과를 내야 한다.
+- **커밋 전에 `make test`가 통과해야 한다.**
 - 커밋 메시지 제목은 영어 명령형 한 줄

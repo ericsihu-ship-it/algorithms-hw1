@@ -1,0 +1,50 @@
+// 퀵 정렬 — QuickSort와 Partition은 수업 자료(algorithm-code의
+// quickSort.pseudo)와 같다. ChoosePivot과 Partition3은 실험 3을 위해 더했다.
+// quickSort.c가 이것을 원소 타입과 무관하게 옮긴 것이다.
+
+ALGORITHM QuickSort(A, lo, hi)
+    if lo >= hi then return          // 원소 하나면 이미 정렬
+    ChoosePivot(A, lo, hi)           // 고른 피벗을 A[lo]로 옮긴다
+    p <- Partition(A, lo, hi)        // 피벗을 제자리에 놓는다
+    QuickSort(A, lo, p-1)            // 피벗 왼쪽 (피벗보다 작은 것들)
+    QuickSort(A, p+1, hi)            // 피벗 오른쪽 (크거나 같은 것들)
+
+ALGORITHM ChoosePivot(A, lo, hi)
+    first:   아무것도 하지 않는다    // 수업 코드. A[lo]가 피벗
+    random:  r <- lo..hi 중 무작위   // 주제 04 옵션 1. 난수는 minstd
+             swap A[lo], A[r]
+    median3: m <- A[lo], A[mid], A[hi] 중 가운데 값의 위치   // 옵션 2
+             swap A[lo], A[m]
+
+ALGORITHM Partition(A, lo, hi)       // 2-way. 수업 코드 그대로
+    pivot <- A[lo]
+    i <- lo                          // i: 피벗보다 작은 구간의 끝
+    for j <- lo+1 to hi do
+        if A[j] < pivot then         // 비교 1회
+            i <- i + 1
+            swap A[i], A[j]          // 이동 3회 (i = j면 건너뛴다)
+    swap A[lo], A[i]                 // 피벗을 경계로
+    return i                         // 피벗의 최종 위치
+
+ALGORITHM QuickSort3(A, lo, hi)      // 3-way 판. 같은 값은 다시 보지 않는다
+    if lo >= hi then return
+    ChoosePivot(A, lo, hi)
+    (lt, gt) <- Partition3(A, lo, hi)
+    QuickSort3(A, lo, lt-1)
+    QuickSort3(A, gt+1, hi)
+
+ALGORITHM Partition3(A, lo, hi)      // 다익스트라의 네덜란드 국기 문제
+    v <- A[lo]                       // 교환 중에 A[lo]가 움직이므로 복사해 든다
+    lt <- lo, i <- lo+1, gt <- hi
+    while i <= gt do
+        if A[i] < v then             // 비교 1회 (세 갈래를 한 번에 가른다)
+            swap A[lt], A[i]; lt++; i++
+        else if A[i] > v then
+            swap A[i], A[gt]; gt--   // 가져온 원소는 아직 안 봤으므로 i는 그대로
+        else
+            i++
+    return (lt, gt)                  // A[lo..lt-1] < v, A[lt..gt] = v, A[gt+1..hi] > v
+
+// 2-way는 피벗과 같은 값을 모두 오른쪽으로 보낸다. 값이 다 같은 구간에서는
+// 매번 한 원소만 떨어져 나가 O(n^2)이 된다. 피벗을 어떻게 골라도 같다.
+// 3-way는 같은 값 전체를 한 번에 제자리에 놓는다.

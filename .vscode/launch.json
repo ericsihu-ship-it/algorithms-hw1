@@ -8,7 +8,8 @@
       "type": "cppdbg",
       "request": "launch",
       "program": "${workspaceFolder}/src/main.debug.out",
-      "args": [],
+      // 디버그 빌드(-O0)로 실험 넷을 다 돌리면 몇 분 걸려서 실험 1만 돌린다.
+      "args": ["shapes"],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
@@ -53,15 +54,6 @@
       "request": "launch",
       "program": "${file}",
       "cwd": "${fileDirname}",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    },
-    {
-      "name": "Python 디버그 (src/main.py)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/src/main.py",
-      "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "justMyCode": true
     }

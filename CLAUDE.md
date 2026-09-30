@@ -1,13 +1,14 @@
 # CLAUDE.md
 
-2026-2 고급알고리즘(SIT2001-01) **과제 1 — 정렬 비교(병합 · 퀵 · 힙)** 저장소.
+2026-2 고급알고리즘(SIT2001-01) **과제 1 — 정렬 비교(병합 · 퀵 · 칵테일 셰이커)** 저장소.
 이 문서는 이 저장소에서 작업하는 AI 도구를 위한 가이드다.
 [algorithm-env](https://github.com/lec-algorithm/algorithm-env) template에서 시작했다.
 
 ## 이 저장소의 범위
 
-- 정렬은 셋이다: `mergeSort` · `quickSort` · `heapSort`. 퀵 정렬만 실험 3을 위해
-  피벗 · 파티션 변형 여섯(`QUICK_VARIANTS`)을 더 가진다. 정렬을 늘리지 않는다.
+- 정렬은 셋이다: `mergeSort` · `quickSort` · `cocktailShakerSort`. 퀵 정렬만 실험 3을
+  위해 피벗 · 파티션 변형 여섯(`QUICK_VARIANTS`)을 더 가지고, 실험 4의 기준선으로
+  버블 정렬(`BASELINE_ALGORITHMS`)이 있다. 정렬을 늘리지 않는다.
 - 병합과 퀵은 수업 코드(algorithm-code)와 **같은 절차**여야 한다. 테스트가
   슬라이드의 비교 · 이동 횟수(병합 22 · 68, 퀵 25 · 21 등)를 그대로 확인한다.
   세는 규칙을 바꾸면 이 테스트가 깨진다.
@@ -17,7 +18,7 @@
 ## 구조와 규약
 
 ```plaintext
-src/    sort.h · sortutil.h · sort.c · mergeSort.c · quickSort.c · heapSort.c
+src/    sort.h · sortutil.h · sort.c · mergeSort.c · quickSort.c · cocktailShakerSort.c · bubbleSort.c
         minstd.h · minstd.c · bench.h · bench.c · main.c · *.pseudo
 tests/  test_sort.c
 tools/  charts.py · svgplot.py

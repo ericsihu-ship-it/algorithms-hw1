@@ -4,6 +4,31 @@
 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따르고,
 버전은 [유의적 버전](https://semver.org/lang/ko/)을 따른다.
 
+## [1.0.0] - 2026-09-30
+
+제출본. 배우지 않은 정렬을 힙 정렬에서 칵테일 셰이커 정렬로 바꾸고, 측정 결과와
+보고서를 넣었다.
+
+### Added
+
+- **칵테일 셰이커 정렬** (`src/cocktailShakerSort.c` · `.pseudo`). 버블 정렬을 앞 · 뒤로
+  번갈아 돌리고, 교환이 없으면 멈춘다. 안정 · 제자리.
+- **기준선 버블 정렬** (`src/bubbleSort.c`, `BASELINE_ALGORITHMS`). 수업 코드에 flag를
+  넣은 판. 칵테일 정렬과 다른 점이 "뒤로 가는 회전" 하나만 남도록 했다.
+- **거북이 · 토끼 입력** (`SHAPE_TURTLE` · `SHAPE_RABBIT`)과 **실험 4 `turtle`**.
+- 테스트 11개 추가(89개): 거북이에서 버블 n(n-1)/2 · 칵테일 3n-6 비교, 두 정렬의
+  이동이 같음, 버블 정렬의 슬라이드 숫자(이동 87 · 75, flag가 있을 때 정렬된 입력 비교 9).
+- **보고서** (`report/REPORT.md`, `report/REPORT.pdf`)와 측정값 · 그래프 (`report/data`, `report/figures`).
+
+### Changed
+
+- 실험 1은 n = 10,000, 실험 2는 n = 2^10 → 2^15로 줄였다. 칵테일 정렬이 O(n²)이다.
+- 실험 1 · 3은 네 입력 모양(무작위 · 정렬됨 · 역순 · 중복많음)만 쓴다.
+
+### Removed
+
+- 힙 정렬(`heapSort`, `buildMaxHeap`)과 실험 4 `heapbuild`.
+
 ## [0.1.0] - 2026-09-28
 
 코드를 먼저 넣었다. 측정 결과와 보고서는 다음 판에 넣는다.
